@@ -1,0 +1,220 @@
+<div>
+    <style>
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between; /* Para espaçar os cards */
+        }
+    
+        .card {
+            flex: 1; /* Os cards crescerão e encolherão igualmente */
+            max-width: calc(25% - 20px); /* Ajuste este valor para controlar o número de cards por linha */
+            border: 1px solid #ccc;
+            margin: 10px;
+            padding: 10px;
+            text-align: center;
+            position: relative; /* Adicionado para posicionar o texto sobre a imagem */
+        }
+    
+        .large-card {
+            flex: 2; /* Card grande ocupa 2x a largura do card normal */
+        }
+    
+        .card img {
+            max-width: 100%;
+            height: auto;
+        }
+    
+        /* Media query para ajustar o tamanho dos cards em telas menores */
+        @media (max-width: 768px) {
+            .card {
+                max-width: calc(50% - 20px); /* Dois cards por linha */
+            }
+        }
+    
+        /* Estilo para o texto sobre a imagem */
+        .card p {
+            color: white;
+            font-weight: bold;
+            position: absolute;
+            top: 50%; /* Centralize verticalmente */
+            left: 50%;
+            transform: translate(-50%, -50%); /* Centralize horizontalmente e verticalmente */
+            background-color: rgba(0, 0, 0, 0.7); /* Fundo semi-transparente para legibilidade */
+            padding: 5px 10px;
+        }
+    
+        #loader {
+            display: none;
+            text-align: center;
+        }
+    
+        /* Estilize a segunda linha de cards */
+        .card-container2 {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between; /* Para espaçar os cards */
+        }
+    
+        .card2 {
+            flex: 1; /* Os cards crescerão e encolherão igualmente */
+            max-width: calc(25% - 20px); /* Ajuste este valor para controlar o número de cards por linha */
+            border: 1px solid #ccc;
+            margin: 10px;
+            padding: 10px;
+            text-align: center;
+            position: relative; /* Adicionado para posicionar o texto sobre a imagem */
+        }
+    
+        .card2 img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+<div id="loader">
+    <!-- Elemento de carregamento -->
+    <p>Carregando...</p>
+</div>
+
+<div class="card-container" id="card-container">
+    <!-- Primeira linha -->
+    <!-- Card grande (primeira linha) -->
+    <div class="card large-card">
+        <img src="" alt="Imagem do card">
+        <p>Texto do card</p>
+        <a href="#">Saiba mais</a>
+    </div>
+
+    <!-- Um card normal -->
+    <div class="card">
+        <img src="" alt="Imagem do card">
+        <p>Texto do card</p>
+        <a href="#">Saiba mais</a>
+    </div>
+</div>
+
+<!-- Crie um card-container2 para a segunda linha de cards -->
+<div class="card-container2" id="card-container2">
+    <!-- Segunda linha -->
+    <!-- Repita isso para cada card normal -->
+    <div class="card2">
+        <img src="" alt="Imagem do card">
+        <p>Texto do card</p>
+        <a href="#">Saiba mais</a>
+    </div>
+
+    <div class="card2">
+        <img src="" alt="Imagem do card">
+        <p>Texto do card</p>
+        <a href="#">Saiba mais</a>
+    </div>
+
+    <div class="card2">
+        <img src="" alt="Imagem do card">
+        <p>Texto do card</p>
+        <a href="#">Saiba mais</a>
+    </div>
+
+    <div class="card2">
+        <img src="" alt="Imagem do card">
+        <p>Texto do card</p>
+        <a href="#">Saiba mais</a>
+    </div>
+</div>
+
+<script>
+    // Função para fazer a requisição à API e preencher os cards
+    function preencherCards() {
+        // Mostrar o elemento de carregamento
+        var loader = document.getElementById('loader');
+        loader.style.display = 'block';
+
+        // Remover os elementos de card existentes
+        var cardContainer = document.getElementById('card-container');
+        cardContainer.innerHTML = '';
+
+        // Remover os elementos de card existentes na segunda linha
+        var cardContainer2 = document.getElementById('card-container2');
+        cardContainer2.innerHTML = '';
+
+        // URL da sua API
+        var apiUrl = 'https://mdin9.sg-host.com/wp-json/api/fiquepordentroconteu'; // Substitua pela URL correta da sua API
+
+        // Fazer uma requisição AJAX para a API
+        fetch(apiUrl)
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                // Remover o elemento de carregamento
+                loader.style.display = 'none';
+
+                // Filtrar o objeto com ID 8714
+                var individuo8714 = data.find(function(item) {
+                    return item.id === 8714;
+                });
+
+                // Filtrar o objeto com ID 8715
+                var individuo8715 = data.find(function(item) {
+                    return item.id === 8715;
+                });
+
+                // Cria o card grande (primeira linha)
+                var largeCard = document.createElement('div');
+                largeCard.className = 'card large-card';
+                largeCard.innerHTML = `
+                    <img src="${individuo8714.imagem.guid}" alt="Imagem do card">
+                    <p>${individuo8714.texto}</p>
+                    <a href="${individuo8714.link}">Saiba mais</a>
+                `;
+                cardContainer.appendChild(largeCard);
+
+                if (individuo8714) {
+                    // Preencher o card grande (primeira linha) com os dados do indivíduo 8714
+                    largeCard.querySelector('img').src = individuo8714.imagem.guid;
+                    largeCard.querySelector('p').textContent = individuo8714.texto;
+                    largeCard.querySelector('a').href = individuo8714.link;
+                } else {
+                    console.error('Indivíduo com ID 8714 não encontrado na API');
+                }
+
+                if (individuo8715) {
+                    // Preencher o card do indivíduo 8715
+                    var card8715 = document.createElement('div');
+                    card8715.className = 'card';
+                    card8715.innerHTML = `
+                        <img src="${individuo8715.imagem.guid}" alt="Imagem do card">
+                        <p>${individuo8715.texto}</p>
+                        <a href="${individuo8715.link}">Saiba mais</a>
+                    `;
+                    cardContainer.appendChild(card8715);
+                } else {
+                    console.error('Indivíduo com ID 8715 não encontrado na API');
+                }
+
+                // Filtrar os objetos que não têm os IDs 8714 e 8715
+                var outrosIndividuos = data.filter(function(item) {
+                    return item.id !== 8714 && item.id !== 8715;
+                });
+
+                // Preencher os cards normais (segunda linha) com informações dos outros indivíduos
+                outrosIndividuos.forEach(function(individuo) {
+                    var card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <img src="${individuo.imagem.guid}" alt="Imagem do card">
+                        <p>${individuo.texto}</p>
+                        <a href="${individuo.link}">Saiba mais</a>
+                    `;
+                    cardContainer.appendChild(card);
+                });
+
+            })
+            .catch(function(error) {
+                console.error('Erro na requisição à API:', error);
+            });
+    }
+    // Chame a função para preencher os cards quando a página carregar
+    window.onload = preencherCards;
+</script>
+</div>

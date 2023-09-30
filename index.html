@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="image-gallery">
+        <!-- As imagens, legendas e texto serão preenchidos aqui dinamicamente -->
+    </div>
+    <style>
+        .image-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start; /* Isso faz com que os cards se alinhem no topo */
+            margin-left: calc(-100vw / 6 + 100px); /* Calcula a margem esquerda */
+            margin-right: calc(-100vw / 6 + 100px);
+        }
+
+        .image-item {
+            width: calc(20% - 20px); /* Define a largura máxima para 5 imagens em uma linha, com margens */
+            margin: 10px; /* Espaçamento entre os cards */
+            text-align: center; /* Centraliza o conteúdo dentro do card */
+        }
+
+        .image-item img {
+            max-width: 100%; /* A imagem não deve exceder a largura do card */
+            height: auto; /* Mantém a proporção da imagem */
+        }
+
+        .image-caption {
+            margin-top: 10px; /* Espaçamento entre a imagem e a legenda */
+        }
+
+        .image-description {
+            margin-top: -120px; /* Espaçamento entre a legenda e o texto de descrição */
+            font-size: 18px; /* Tamanho da fonte do texto de descrição */
+            font-family: 'Poppins', sans-serif; /* Fonte Poppins */
+            color: white; /* Cor branca */
+            font-weight: bold; /* Peso em negrito */
+            text-align: left;
+            position: relative; /* Define posição absoluta para o texto */
+            bottom: -140px; /* Alinha o texto na parte inferior do card */
+            top: 0px;
+            left: calc(100vw / 22 - 15px);
+            padding: 20px;
+            
+        }
+
+        @media screen and (min-width: 1180px) {
+            .image-description {
+                font-size: 16px; /* Novo tamanho da fonte */
+                left: calc(100vw / 22 + 30px) !important;
+            }
+        }
+        
+        @media screen and (min-width: 1110px) {
+            .image-description {
+                font-size: 14px; /* Novo tamanho da fonte */
+                left: calc(100vw / 22 - 0px) !important; 
+            }
+        }
+
+        @media screen and (min-width: 1880px) {
+            .image-description {
+                left: calc(100vw / 22 - 10px) !important; 
+            }
+        }
+        
+        @media screen and (min-width: 1530px) {
+            .image-description {
+                left: calc(100vw / 22 - 20px) !important; 
+            }
+        }
+        
+        @media screen and (min-width: 1830px) {
+            .image-description {
+                left: calc(100vw / 22 - 50px) !important; 
+            }
+        }
+
+        @media screen and (max-width: 2600px) {
+            .image-description {
+                left: calc(100vw / 22 - 90px) !important;
+                font-size: 16px; 
+            }
+        }
+
+    </style>
+    <script>
+        // Função para fazer a requisição à API e preencher a estrutura
+        function carregarImagensDaAPI() {
+            // URL da sua API
+            var apiUrl = 'https://mdin9.sg-host.com/wp-json/api/etapas/etapa';
+
+            // Fazer uma requisição AJAX para a API
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', apiUrl, true);
+            xhr.onload = function() {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    var response = JSON.parse(xhr.responseText);
+                    var imageGallery = document.querySelector('.image-gallery');
+
+                    // Reverter a ordem dos dados da API
+                    response.reverse();
+
+                    // Iterar sobre os dados da API e criar elementos para cada imagem
+                    response.forEach(function(item) {
+                        var imageItem = document.createElement('div');
+                        imageItem.className = 'image-item';
+
+                        var img = document.createElement('img');
+                        img.src = item.imagem.guid; // Substitua 'imagemUrl' pelo campo correto na API
+                        img.alt = item.descricao; // Substitua 'descricao' pelo campo correto na API
+
+                        var imageCaption = document.createElement('div');
+                        imageCaption.className = 'image-caption';
+                        imageCaption.textContent = item.legenda; // Substitua 'legenda' pelo campo correto na API
+
+                        var imageDescription = document.createElement('p');
+                        imageDescription.className = 'image-description';
+                        imageDescription.textContent = item.texto; // Substitua 'texto' pelo campo correto na API
+
+                        imageItem.appendChild(img);
+                        imageItem.appendChild(imageCaption);
+                        imageItem.appendChild(imageDescription);
+
+                        imageGallery.appendChild(imageItem);
+                    });
+                } else {
+                    Alert('Erro na requisição à API');
+                }
+            };
+            xhr.onerror = function() {
+                Alert('Erro na requisição à API');
+            };
+            xhr.send();
+        }
+    
+        // Chame a função para carregar as imagens da API quando a página carregar
+        window.onload = carregarImagensDaAPI;
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
+</body>
+</html>

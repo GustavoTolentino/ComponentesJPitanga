@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .component {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .component img {
+            width: 100%;
+            height: auto;
+            cursor: pointer; /* Altera o cursor para indicar que a imagem é clicável */
+        }
+
+        /* Define a área clicável em toda a imagem */
+        .image-link {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0; /* Torna a área invisível */
+        }
+
+        /* Estilos para as áreas de link */
+        .link-area1 {
+            width: 100%;
+            height: 33%; /* Define a altura do primeiro link como 20% */
+            top: 0; /* Define a posição do primeiro link no topo */
+        }
+
+        .link-area2 {
+            width: 100%;
+            height: 23%; /* Define a altura do segundo link como 35% */
+            top: 33%; /* Define a posição do segundo link abaixo do primeiro */
+        }
+
+        .link-area3 {
+            width: 100%;
+            height: 45%; /* Define a altura do terceiro link como 45% */
+            top: 55%; /* Define a posição do terceiro link abaixo do segundo */
+        }
+
+        #loader {
+            display: none;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="loader">
+        <!-- Elemento de carregamento -->
+        <p>Carregando...</p>
+    </div>
+    <div class="component" id="component">
+        <!-- Componente de imagem com áreas de link -->
+        <img src="" alt="Imagem de fundo">
+        <!-- Áreas de Link -->
+        <a class="image-link link-area1" href="#link1">
+        </a>
+        <a class="image-link link-area2" href="#link2">
+        </a>
+        <a class="image-link link-area3" href="#link3">
+        </a>
+    </div>
+    
+    <script>
+        // Função para fazer a requisição à API e preencher o componente
+        function preencherComponente() {
+            // Mostrar o elemento de carregamento
+            var loader = document.getElementById('loader');
+            loader.style.display = 'block';
+
+            // URL da sua API
+            var apiUrl = 'https://mdin9.sg-host.com/wp-json/api/escolhaporidade'; // Substitua pela URL correta da sua API
+
+            // Seletor para o componente
+            var componente = document.getElementById('component');
+
+            // Fazer uma requisição AJAX para a API
+            fetch(apiUrl)
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(data) {
+                    // Remover o elemento de carregamento
+                    loader.style.display = 'none';
+
+                    console.log(data);
+                    console.log(data);
+                    console.log(data);
+                    console.log(data);
+                    console.log(data);
+                    // Preencher a imagem do componente
+                    if (data[0].imagem) {
+                        componente.querySelector('img').src = data[0].imagem.guid;
+                    } else {
+                        console.error('Imagem não encontrada na API');
+                    }
+
+                    // Preencher os links das áreas de link
+                    if (data[0].linkgestacao) {
+                        var linkArea1 = componente.querySelector('.link-area1');
+                        linkArea1.href = data[0].linkgestacao;
+                    } else {
+                        console.error('Link 1 não encontrado na API');
+                    }
+
+                    if (data[0].linkmeses) {
+                        var linkArea2 = componente.querySelector('.link-area2');
+                        linkArea2.href = data[0].linkmeses;
+                    } else {
+                        console.error('Link 2 não encontrado na API');
+                    }
+
+                    if (data[0].linkanos) {
+                        var linkArea3 = componente.querySelector('.link-area3');
+                        linkArea3.href = data[0].linkanos;
+                    } else {
+                        console.error('Link 3 não encontrado na API');
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Erro na requisição à API:', error);
+                });
+        }
+
+        // Chame a função para preencher o componente quando a página carregar
+        window.onload = preencherComponente;
+    </script>
+</body>
+</html>
